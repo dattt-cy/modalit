@@ -1,0 +1,59 @@
+.modalit__backdrop {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.6);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity, visibility;
+    transition-duration: 0.3s;
+}
+.modalit__backdrop--show {
+    opacity: 1;
+    visibility: visible;
+}
+.modalit__backdrop--show {
+    opacity: 1;
+    visibility: visible;
+}
+.modalit__backdrop--show .modalit__container {
+    transform: scale(1);
+}
+
+.modalit__container {
+    position: relative;
+    width: min(600px, 90%);
+    padding: 28px;
+    border-radius: 10px;
+    background-color: #fff;
+    transform: scale(0);
+    transition: transform 0.3s;
+}
+.modalit__close {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    color: #666;
+    background-color: #ebebeb;
+    font-style: 2rem;
+}
+
+.modalit__content {
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+.no-scroll {
+    overflow: hidden;
+}
+.modalit__footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    padding: 20px 0;
+}
