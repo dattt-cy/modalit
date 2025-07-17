@@ -1,19 +1,33 @@
 Modalit.elements = [];
 function Modalit(options = {}) {
+    if (!options.content && !options.templateId) {
+        console.error("Either templateId or content must be provided");
+        return;
+    }
+    if (options.content && options.templateId) {
+        options.templateId = null;
+        console.warn("Both content and templateId provided. Using content.");
+    }
+    if (options.templateId) {
+        this.template = document.querySelector(`#${options.templateId}`);
+        if (!this.template) {
+            console.error(`Template not found: ${options.templateId}`);
+            return;
+        }
+    }
     this.opts = Object.assign(
         {
+            enableScrollLock: true,
             footer: false,
             destroyOnClose: true,
             closeMethods: ["button", "overlay", "escape"],
             cssClass: [],
+            scrollLockTarget: () => document.body,
         },
         options
     );
-    this.template = document.querySelector(`#${this.opts.templateId}`);
-    if (!this.template) {
-        console.error(`Template not found: ${this.opts.templateId}`);
-        return;
-    }
+    this.content = this.opts.content;
+
     const { closeMethods } = this.opts;
     this._allowButtonClose = closeMethods.includes("button");
     this._allowBackdropClose = closeMethods.includes("overlay");
@@ -37,10 +51,14 @@ Modalit.prototype._getScrollBarWidth = function () {
 };
 
 Modalit.prototype._build = function () {
-    const content = this.template.content.cloneNode(true);
-
+    const contentNode = this.content
+        ? document.createElement("div")
+        : this.template.content.cloneNode(true);
+    if (this.content) {
+        contentNode.innerHTML = this.content;
+    }
     this._backdrop = document.createElement("div");
-    this._backdrop.className = "modalit__backdrop";
+    this._backdrop.className = "modalit";
 
     const container = document.createElement("div");
     container.className = "modalit__container";
@@ -56,11 +74,11 @@ Modalit.prototype._build = function () {
         container.append(closeBtn);
     }
 
-    const modalContent = document.createElement("div");
-    modalContent.className = "modalit__content";
+    this._modalContent = document.createElement("div");
+    this._modalContent.className = "modalit__content";
 
-    modalContent.append(content);
-    container.append(modalContent);
+    this._modalContent.append(contentNode);
+    container.append(this._modalContent);
     this._backdrop.append(container);
     document.body.append(this._backdrop);
     if (this.opts.footer) {
@@ -69,6 +87,12 @@ Modalit.prototype._build = function () {
         this._renderFooterContent();
         this._renderFooterButtons();
         container.append(this._modalFooter);
+    }
+};
+Modalit.prototype.setContent = function (content) {
+    this.content = content;
+    if (this._modalContent) {
+        this._modalContent.innerHTML = content;
     }
 };
 Modalit.prototype.setFooterContent = function (content) {
@@ -87,7 +111,7 @@ Modalit.prototype.open = function () {
         this._build();
     }
     setTimeout(() => {
-        this._backdrop.classList.add("modalit__backdrop--show");
+        this._backdrop.classList.add("modalit--show");
     }, 0);
 
     if (this._allowBackdropClose) {
@@ -102,10 +126,31 @@ Modalit.prototype.open = function () {
         document.addEventListener("keydown", this._handleEscapeKey.bind(this));
     }
     this._onTransitionEnd(this.opts.onOpen);
+    if (this.opts.enableScrollLock && Modalit.elements.length === 1) {
+        const target = this.opts.scrollLockTarget();
+        if (this._hasScrollbar(target)) {
+            target.classList.add("modalit--no-scroll");
+            const targetPaddingRight = parseInt(
+                getComputedStyle(target).paddingRight
+            );
 
-    document.body.classList.add("no-scroll");
-    document.body.style.paddingRight = `${this._getScrollBarWidth()}px`;
+            target.style.paddingRight = `${
+                targetPaddingRight + this._getScrollBarWidth()
+            }px`;
+        }
+    }
+
     return this._backdrop;
+};
+Modalit.prototype._hasScrollbar = (target) => {
+    if ([document.body, document.documentElement].includes(target)) {
+        return (
+            document.documentElement.scrollHeight >
+                document.documentElement.clientHeight ||
+            document.body.scrollHeight > document.body.clientHeight
+        );
+    }
+    return target.scrollHeight > target.clientHeight;
 };
 
 Modalit.prototype._handleEscapeKey = function (e) {
@@ -126,11 +171,7 @@ Modalit.prototype._onTransitionEnd = function (callback) {
 Modalit.prototype._footerButtons = [];
 
 Modalit.prototype.addFooterButton = function (content, className, onClick) {
-    const button = this._createButton(
-        content,
-        className.replace(/modal-btn/g, "modalit__btn"),
-        onClick
-    );
+    const button = this._createButton(content, className, onClick);
     this._footerButtons.push(button);
     this._renderFooterButtons();
 };
@@ -150,7 +191,7 @@ Modalit.prototype._createButton = function (content, className, onClick) {
 };
 Modalit.prototype.close = function (isDestroy = this.opts.destroyOnClose) {
     Modalit.elements.pop();
-    this._backdrop.classList.remove("modalit__backdrop--show");
+    this._backdrop.classList.remove("modalit--show");
     if (this._allowEscapeClose) {
         document.removeEventListener("keydown", this._handleEscapeKey);
     }
@@ -160,9 +201,12 @@ Modalit.prototype.close = function (isDestroy = this.opts.destroyOnClose) {
             this._backdrop = null;
             this._modalFooter = null;
         }
-        if (Modalit.elements.length === 0) {
-            document.body.classList.remove("no-scroll");
-            document.body.style.paddingRight = "";
+        if (Modalit.elements.length === 0 && this.opts.enableScrollLock) {
+            const target = this.opts.scrollLockTarget();
+            if (this._hasScrollbar(target)) {
+                target.classList.remove("modalit--no-scroll");
+                target.style.paddingRight = "";
+            }
         }
 
         if (typeof this.opts.onClose === "function") {

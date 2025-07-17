@@ -2,10 +2,10 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8" />
-        <title>Popzy.js: A 2kB Vanilla JavaScript Modal Library</title>
+        <title>Modalit.js: A 2kB Vanilla JavaScript Modal Library</title>
         <meta
             name="description"
-            content="Popzy.js is a lightweight and user-friendly modal library written in pure JavaScript. It is designed for great user experience (2kB, no dependencies, fully customizable with CSS)."
+            content="modalit.js is a lightweight and user-friendly modal library written in pure JavaScript. It is designed for great user experience (2kB, no dependencies, fully customizable with CSS)."
         />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link
@@ -14,13 +14,14 @@
             media="all"
         />
         <link rel="stylesheet" href="./assets/styles.css" media="all" />
+        <link rel="stylesheet" href="./src/modalit.css" />
         <link rel="shortcut icon" href="./favicon.ico" type="image/x-icon" />
     </head>
     <body>
         <!-- HEADER -->
         <header class="header">
             <div class="container">
-                <h1 class="header__title">Popzy.js</h1>
+                <h1 class="header__title">Modalit.js</h1>
                 <div class="header__tagline">
                     A lightweight and simple modal library built with pure
                     JavaScript.
@@ -39,8 +40,9 @@
         <div class="container content">
             <h2 data-bullet="1" class="title" id="try-it-out">Try It Out</h2>
             <p>
-                Popzy is a lightweight <strong>modal library</strong> built with
-                pure JavaScript. (<a href="https://github.com/dattt-cy/modalit"
+                Modalit is a lightweight <strong>modal library</strong> built
+                with pure JavaScript. (<a
+                    href="https://github.com/dattt-cy/modalit"
                     >Source code available on GitHub</a
                 >)
             </p>
@@ -54,27 +56,30 @@
                 <li>Optimized for user experience</li>
             </ul>
 
-            <p>Here are some examples of how to use Popzy:</p>
+            <p>Here are some examples of how to use modalit:</p>
 
-            <button class="btn btn--primary btn-demo js-popzy-modal-1">
+            <button
+                class="btn btn--primary btn-demo js-modalit-modal-1"
+                id="btn-demo-1"
+            >
                 Basic Modal
             </button>
-            <button class="btn btn--secondary btn-demo js-popzy-modal-2">
+            <button class="btn btn--secondary btn-demo js-modalit-modal-2">
                 Modal with Buttons
             </button>
-            <button class="btn btn--secondary btn-demo js-popzy-modal-3">
+            <button class="btn btn--secondary btn-demo js-modalit-modal-3">
                 Large Content Modal
             </button>
-            <button class="btn btn--secondary btn-demo js-popzy-modal-5">
+            <button class="btn btn--secondary btn-demo js-modalit-modal-5">
                 Footer-Only Close Modal
             </button>
-            <button class="btn btn--secondary btn-demo js-popzy-modal-6">
+            <button class="btn btn--secondary btn-demo js-modalit-modal-6">
                 Persistent Modal (Stays in DOM)
             </button>
-            <button class="btn btn--secondary btn-demo js-popzy-modal-7">
+            <button class="btn btn--secondary btn-demo js-modalit-modal-7">
                 Multiple Modals
             </button>
-            <button class="btn btn--secondary btn-demo js-popzy-modal-4">
+            <button class="btn btn--secondary btn-demo js-modalit-modal-4">
                 YouTube Embed Modal
             </button>
 
@@ -93,46 +98,46 @@
                     <td>
                         <a
                             href="https://github.com/dattt-cy/modalit/archive/master.zip"
-                            title="Download Popzy"
+                            title="Download modalit"
                         >
                             Download ZIP
                         </a>
                         <p>
                             Simply extract the ZIP file and use the
-                            <code>popzy.min.js</code> and
-                            <code>popzy.min.css</code> files in your project.
+                            <code>modalit.min.js</code> and
+                            <code>modalit.min.css</code> files in your project.
                         </p>
                     </td>
                 </tr>
             </table>
             <p>
-                Popzy provides a small CSS file that you can include directly
+                modalit provides a small CSS file that you can include directly
                 via a CDN link. This makes it easy to integrate into your
                 project and customize as needed.
             </p>
 
-            <p>Include the Popzy JavaScript file in your project:</p>
+            <p>Include the modalit JavaScript file in your project:</p>
 
             <pre
                 class="html"
-            ><code>&lt;script src=&quot;https://cdn.jsdelivr.net/gh/sondnpt00343/popzy/popzy.min.js&quot;&gt;&lt;/script&gt;</code></pre>
+            ><code>&lt;script src=&quot;https://cdn.jsdelivr.net/gh/dattt-cy/modalit/modalit.min.js&quot;&gt;&lt;/script&gt;</code></pre>
 
-            <p>Optionally, include the Popzy CSS file for default styling:</p>
+            <p>Optionally, include the modalit CSS file for default styling:</p>
 
             <pre class="html"><code>&lt;link
     rel=&quot;stylesheet&quot;
-    href=&quot;https://cdn.jsdelivr.net/gh/sondnpt00343/popzy/popzy.min.css&quot;
+    href=&quot;https://cdn.jsdelivr.net/gh/dattt-cy/modalit/modalit.min.css&quot;
 &gt;</code></pre>
 
             <p>
-                You can explore the list of CSS classes used by Popzy in the
+                You can explore the list of CSS classes used by modalit in the
                 <a href="#styling">Styling</a> section to easily customize them
                 as needed.
             </p>
 
             <h2 data-bullet="3" class="title" id="usage">Usage</h2>
             <pre class="javascript"><code>// Initialize a new modal
-const modal = new Popzy({
+const modal = new modalit({
     content: '&lt;h1&gt;This is content&lt;/h1&gt;',
     // templateId: 'my-modal-template',
     footer: true,
@@ -209,6 +214,14 @@ modal.close();</code></pre>
                     </td>
                 </tr>
                 <tr>
+                    <td>cssClass</td>
+                    <td>array</td>
+                    <td>
+                        Custom CSS classes applied to the modal container
+                        (default: <code>[]</code>)
+                    </td>
+                </tr>
+                <tr>
                     <td>footer</td>
                     <td>boolean</td>
                     <td>
@@ -232,6 +245,27 @@ modal.close();</code></pre>
                         <code>['overlay', 'button', 'escape']</code>)
                     </td>
                 </tr>
+                <tr>
+                    <td>enableScrollLock</td>
+                    <td>boolean</td>
+                    <td>
+                        Enables or disables scroll locking when the modal is
+                        open. When set to
+                        <code>true</code>, it prevents scrolling on the target
+                        element specified by <code>scrollLockTarget</code>.
+                        Default: <code>true</code>.
+                    </td>
+                </tr>
+                <tr>
+                    <td>scrollLockTarget</td>
+                    <td>function</td>
+                    <td>
+                        A callback that returns the element to apply scroll
+                        locking on. By default, it locks scrolling on
+                        <code>document.body</code>.
+                    </td>
+                </tr>
+
                 <tr>
                     <td>onOpen</td>
                     <td>function</td>
@@ -261,7 +295,7 @@ modal.close();</code></pre>
             <!-- Styling section -->
             <h2 data-bullet="5" class="title" id="styling">Styling</h2>
             <p>
-                Popzy styles are defined in CSS, with some positioning handled
+                modalit styles are defined in CSS, with some positioning handled
                 by JavaScript. You can fully customize it to meet your design
                 requirements.
             </p>
@@ -275,7 +309,7 @@ modal.close();</code></pre>
                 </thead>
                 <tbody>
                     <tr>
-                        <td><code>.popzy</code></td>
+                        <td><code>.modalit</code></td>
                         <td>
                             Styles the backdrop overlay for the modal. Handles
                             positioning, centering the modal, and applying a
@@ -283,14 +317,14 @@ modal.close();</code></pre>
                         </td>
                     </tr>
                     <tr>
-                        <td><code>.popzy--show</code></td>
+                        <td><code>.modalit--show</code></td>
                         <td>
                             Applied when the modal is visible. Controls the
                             visibility and opacity of the backdrop.
                         </td>
                     </tr>
                     <tr>
-                        <td><code>.popzy__container</code></td>
+                        <td><code>.modalit__container</code></td>
                         <td>
                             Styles the modal container, including its size,
                             padding, border-radius, and transform animations for
@@ -298,28 +332,28 @@ modal.close();</code></pre>
                         </td>
                     </tr>
                     <tr>
-                        <td><code>.popzy__close</code></td>
+                        <td><code>.modalit__close</code></td>
                         <td>
                             Styles the close button inside the modal, including
                             its size, position, and hover effects.
                         </td>
                     </tr>
                     <tr>
-                        <td><code>.popzy__content</code></td>
+                        <td><code>.modalit__content</code></td>
                         <td>
                             Handles the modal's main content area, including
                             scrollable behavior with a maximum height.
                         </td>
                     </tr>
                     <tr>
-                        <td><code>.popzy__footer</code></td>
+                        <td><code>.modalit__footer</code></td>
                         <td>
                             Styles the modal footer, aligning buttons to the
                             right and adding spacing between them.
                         </td>
                     </tr>
                     <tr>
-                        <td><code>.popzy--no-scroll</code></td>
+                        <td><code>.modalit--no-scroll</code></td>
                         <td>
                             Disables scrolling on the body when the modal is
                             open.
@@ -331,9 +365,9 @@ modal.close();</code></pre>
             <p>
                 For more details, you can view the full CSS file directly here:
                 <a
-                    href="https://github.com/sondnpt00343/popzy/blob/main/src/popzy.css"
+                    href="https://github.com/sondnpt00343/modalit/blob/main/src/modalit.css"
                     target="_blank"
-                    >popzy.css</a
+                    >modalit.css</a
                 >.
             </p>
 
@@ -397,10 +431,30 @@ modal.close();</code></pre>
             </footer>
         </div>
         <!-- /CONTAINER -->
+        <template id="modal-1">
+            <h2>Modal 1</h2>
+            <p>This is the content of Modal 1.</p>
+        </template>
 
         <script src="./assets/highlight/highlight.js"></script>
+        <script src="./src/modalit.js"></script>
         <script>
             hljs.initHighlightingOnLoad();
+            console.log(Modalit);
+
+            const modal1 = new Modalit({
+                // enableScrollLock: false,
+                templateId: "modal-1",
+                footer: true,
+                // scrollLockTarget: () => {
+
+                // }
+            });
+            // modal1.addFooterButton("Close", "btn btn--default", (e) => {});
+            const btn = document.querySelector("#btn-demo-1");
+            btn.addEventListener("click", function () {
+                modal1.open();
+            });
         </script>
     </body>
 </html>

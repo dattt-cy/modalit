@@ -1,4 +1,4 @@
-.modalit__backdrop {
+.modalit {
     position: fixed;
     inset: 0;
     display: flex;
@@ -10,19 +10,20 @@
     transition: opacity, visibility;
     transition-duration: 0.3s;
 }
-.modalit__backdrop--show {
+.modalit--show {
     opacity: 1;
     visibility: visible;
 }
-.modalit__backdrop--show {
+.modalit--show {
     opacity: 1;
     visibility: visible;
 }
-.modalit__backdrop--show .modalit__container {
+.modalit--show .modalit__container {
     transform: scale(1);
 }
 
 .modalit__container {
+    padding: 20px;
     position: relative;
     width: min(600px, 90%);
     padding: 28px;
@@ -42,18 +43,22 @@
     background-color: #ebebeb;
     font-style: 2rem;
 }
+.modalit__close:hover {
+    color: #333;
+    cursor: pointer;
+}
 
 .modalit__content {
     max-height: 80vh;
     overflow-y: auto;
 }
 
-.no-scroll {
+.modalit--no-scroll {
     overflow: hidden;
 }
 .modalit__footer {
     display: flex;
     justify-content: flex-end;
     gap: 8px;
-    padding: 20px 0;
+    padding-top: 20px;
 }
